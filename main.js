@@ -14,11 +14,23 @@ function generateSecureString(length) {
   return Array.from(array, (byte) => chars[byte % chars.length]).join('');
 }
 
-client.on('text', (packet) => { 
-  if (packet.source_name != client.username) {
-    client.queue('text', {
-      type: 'chat', needs_translation: false, source_name: client.username, xuid: '', platform_chat_id: '', filtered_message: '',
-      message: `RandomMizerrr Sent Me To Here. | ${generateSecureString(3)} | ROBUZ V1`
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function looop() {
+  const cooldownMs = 5500; // 5.5 seconds
+
+  while (true) {
+    client.on('text', (packet) => { 
+      if (packet.source_name != client.username) {
+        client.queue('text', {
+          type: 'chat', needs_translation: false, source_name: client.username, xuid: '', platform_chat_id: '', filtered_message: '',
+          message: `RandomMizerrr Sent Me To Here. | ${generateSecureString(5)}`
+        })
+      }
     })
+
+    await sleep(cooldownMs);
   }
-})
+}
+
+looop();
