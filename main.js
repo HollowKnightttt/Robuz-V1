@@ -1,36 +1,24 @@
 const bedrock = require('bedrock-protocol')
+const { randomBytes } = require('crypto')
+
 const client = bedrock.createClient({
-  host: '10b10t.uk.to',   
-  port: 19132,         
-  version: '1.26.60', 
-  offline: false       
+  host: '10b10t.uk.to', port: 19132, version: '1.26.60', offline: false
 })
 
-function generateSecureString(length) {
-  const chars = '1234567890abclpo';
-  const array = new Uint8Array(length);
-  crypto.getRandomValues(array);
-  
-  return Array.from(array, (byte) => chars[byte % chars.length]).join('');
-}
+const chars = '1234567890abclpo'
+const rand = (n) => Array.from(randomBytes(n), b => chars[b % chars.length]).join('')
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+let ready = false, lastSent = 0
+client.on('spawn', () => { ready = true })
+client.on('error', console.error)
 
-async function looop() {
-  const cooldownMs = 5500; // 5.5 seconds
-
-  while (true) {
-    client.on('text', (packet) => { 
-      if (packet.source_name != client.username) {
-        client.queue('text', {
-          type: 'chat', needs_translation: false, source_name: client.username, xuid: '', platform_chat_id: '', filtered_message: '',
-          message: `RandomMizerrr Sent Me To Here. | ${generateSecureString(5)}`
-        })
-      }
-    })
-
-    await sleep(cooldownMs);
-  }
-}
-
-looop();
+client.on('text', (p) => {
+  if (!ready || p.type !== 'chat' || p.source_name === client.username) return
+  if (Date.now() - lastSent < 5500) return
+  lastSent = Date.now()
+  client.queue('text', {
+    type: 'chat', needs_translation: false, source_name: client.username,
+    xuid: '', platform_chat_id: '', filtered_message: '',
+    message: `RandomMizerrr Sent Me To Here. | ${rand(5)}`
+  })
+})
