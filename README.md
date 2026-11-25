@@ -1,13 +1,13 @@
-# Robuz MCBE Bot V1.0.1
+# Robuz Bot V1.0.1
 
 Robuz is a bot for Minecraft Bedrock Edition that helps automate
 
 ## Requirements
 
-- Minecraft Bedrock Edition
+- Minecraft Bedrock Edition & Java Edition
 - Node.js v26.13.1
 - Network access to the bot/server
-- A compatible Minecraft Bedrock server or realm
+- A compatible Minecraft Bedrock/Java server or realm
 
 ## Installation
 
